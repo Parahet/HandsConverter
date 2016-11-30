@@ -1,8 +1,0 @@
-C:\HandsConverter\HandsConverter\bin\Release\HandsConverter.exe.config
-C:\HandsConverter\HandsConverter\bin\Release\HandsConverter.exe
-C:\HandsConverter\HandsConverter\bin\Release\HandsConverter.pdb
-C:\HandsConverter\HandsConverter\obj\Release\HandsConverter.Form1.resources
-C:\HandsConverter\HandsConverter\obj\Release\HandsConverter.Properties.Resources.resources
-C:\HandsConverter\HandsConverter\obj\Release\HandsConverter.csproj.GenerateResource.Cache
-C:\HandsConverter\HandsConverter\obj\Release\HandsConverter.exe
-C:\HandsConverter\HandsConverter\obj\Release\HandsConverter.pdb
