@@ -1,0 +1,57 @@
+D:\job\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe.config
+D:\job\HandsConverter\HandsConverter\obj\Debug\HandsConverter.exe
+D:\job\HandsConverter\HandsConverter\obj\Debug\HandsConverter.pdb
+D:\job\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe
+D:\job\HandsConverter\HandsConverter\bin\Debug\HandsConverter.pdb
+D:\job\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Form1.resources
+D:\job\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Properties.Resources.resources
+D:\job\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csproj.GenerateResource.Cache
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe.config
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\bin\Debug\HandsConverter.pdb
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Form1.resources
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Properties.Resources.resources
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csproj.GenerateResource.Cache
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\obj\Debug\HandsConverter.exe
+c:\Users\Eugene.Parakhonko\Documents\Visual Studio 2013\Projects\HandsConverter\HandsConverter\obj\Debug\HandsConverter.pdb
+D:\converter\HC\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe.config
+D:\converter\HC\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe
+D:\converter\HC\HandsConverter\HandsConverter\bin\Debug\HandsConverter.pdb
+D:\converter\HC\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Form1.resources
+D:\converter\HC\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Properties.Resources.resources
+D:\converter\HC\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csproj.GenerateResource.Cache
+D:\converter\HC\HandsConverter\HandsConverter\obj\Debug\HandsConverter.exe
+D:\converter\HC\HandsConverter\HandsConverter\obj\Debug\HandsConverter.pdb
+D:\converter\HC\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csprojResolveAssemblyReference.cache
+C:\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe
+C:\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe.config
+C:\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Form1.resources
+C:\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Properties.Resources.resources
+C:\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csproj.GenerateResource.Cache
+C:\HandsConverter\HandsConverter\obj\Debug\HandsConverter.exe
+C:\HandsConverter\HandsConverter\obj\Debug\HandsConverter.pdb
+C:\HandsConverter\HandsConverter\bin\Debug\HandsConverter.pdb
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe.config
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\obj\Debug\HandsConverter.exe
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\obj\Debug\HandsConverter.pdb
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\bin\Debug\HandsConverter.pdb
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Form1.resources
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Properties.Resources.resources
+d:\converter\HandsConverter-20161011T124941Z\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csproj.GenerateResource.Cache
+d:\proj\MULTI\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe.config
+d:\proj\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.exe
+d:\proj\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.pdb
+d:\proj\MULTI\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe
+d:\proj\MULTI\HandsConverter\HandsConverter\bin\Debug\HandsConverter.pdb
+d:\proj\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Form1.resources
+d:\proj\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Properties.Resources.resources
+d:\proj\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csproj.GenerateResource.Cache
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe.config
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\bin\Debug\HandsConverter.exe
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\bin\Debug\HandsConverter.pdb
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Form1.resources
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.Properties.Resources.resources
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.csproj.GenerateResource.Cache
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.exe
+D:\converter\MULTI-20161012T111908Z\MULTI\HandsConverter\HandsConverter\obj\Debug\HandsConverter.pdb

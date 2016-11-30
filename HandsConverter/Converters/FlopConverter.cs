@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace HandsConverter.Converters
+{
+    public class FlopConverter : Converter
+    {
+        private string card1;
+        private string card2;
+        private string card3;
+
+        private const string patternBeforeCard1 = @"\*\*\* FLOP \*\*\* \[";
+        private const string patternAfterCard1 = " " + Consts.Card + " " + Consts.Card + @"\]";
+        private const string patternBeforeCard2 = @"\*\*\* FLOP \*\*\* \[" + Consts.Card + " ";
+        private const string patternAfterCard2 = " " + Consts.Card + @"\]";
+        private const string patternBeforeCard3 = @"\*\*\* FLOP \*\*\* \[" + Consts.Card + " " + Consts.Card + " ";
+        private const string patternAfterCard3 = @"\]";
+        public FlopConverter(string str) : base(str)
+        {
+        }
+
+        protected override string pattern
+        {
+            get
+            {
+                return @"\*\*\* FLOP \*\*\* \[" + Consts.Card + " " + Consts.Card + " " +
+                       Consts.Card + @"\]";
+            }
+        }
+
+        public override string ConvertToParty()
+        {
+            return String.Format("** Dealing Flop ** [ {0}, {1}, {2} ]", card1, card2, card3);
+        }
+
+        public override void Initialize()
+        {
+            card1 = Regex.Replace(Regex.Replace(str, patternBeforeCard1, ""), patternAfterCard1, "");
+            card2 = Regex.Replace(Regex.Replace(str, patternBeforeCard2, ""), patternAfterCard2, "");
+            card3 = Regex.Replace(Regex.Replace(str, patternBeforeCard3, ""), patternAfterCard3, "");
+        }
+    }
+}
