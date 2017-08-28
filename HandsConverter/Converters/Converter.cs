@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace HandsConverter.Converters
 {
-    public abstract class Converter
+	public abstract class Converter
     {
         protected string str;
         protected Converter(string str)
@@ -27,6 +22,7 @@ namespace HandsConverter.Converters
         }
 
         public abstract string ConvertToParty();
-        public abstract void Initialize();
+	    public abstract string ConvertTo888();
+		public abstract void Initialize();
     }
 }

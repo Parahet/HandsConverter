@@ -29,7 +29,13 @@ namespace HandsConverter.Converters
             return PlayerName + " posts small blind [" + count.ToCommaSeparateString() + "].";
         }
 
-        public override void Initialize()
+	    public override string ConvertTo888()
+	    {
+			playersPutInAmount[playerName] += count;
+		    return PlayerName + " posts small blind [$" + count.ToCommaSeparateString() + "].";
+		}
+
+	    public override void Initialize()
         {
             var match = new Regex(pattern).Match(str);
             playerName = match.Groups["playerName"].Value;

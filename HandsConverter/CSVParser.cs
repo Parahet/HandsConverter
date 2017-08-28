@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace HandsConverter
 {
-    public class CSVParser
+	public class CSVParser
     {
         private string csvPath;
         public CSVParser(string filePath)

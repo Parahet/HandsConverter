@@ -15,17 +15,19 @@ namespace HandsConverter.Converters
         {
         }
 
-        protected override string pattern
-        {
-            get { return @"Uncalled bet \((?<uncalledBet>\d+)\) returned to (?<playerName>.*)"; }
-        }
+        protected override string pattern => @"Uncalled bet \((?<uncalledBet>\d+)\) returned to (?<playerName>.*)";
 
-        public override string ConvertToParty()
+	    public override string ConvertToParty()
         {
             return "";
         }
 
-        public override void Initialize()
+	    public override string ConvertTo888()
+	    {
+			return "";
+		}
+
+	    public override void Initialize()
         {
             var match = new Regex(pattern).Match(str);
             playerName = match.Groups["playerName"].Value;

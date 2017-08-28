@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HandsConverter.Converters
 {
-    public class TableHeaderConverter : Converter
+	public class TableHeaderConverter : Converter
     {
         public long tournamentNumber;
         public int tableNumber;
@@ -22,23 +18,30 @@ namespace HandsConverter.Converters
         }
         //Table '1607627129 44' 6-max Seat #2 is the button
         //Table '1607627129 44' 6-max Seat #1 is the button
-        protected override string pattern
-        {
-            get { return @"Table '(?<tournamentNumber>\d+) (?<tableNumber>\d+)' (?<maxSeat>\d)-max Seat #(?<buttonNumber>\d) is the button"; }
-        }
+        protected override string pattern => @"Table '(?<tournamentNumber>\d+) (?<tableNumber>\d+)' (?<maxSeat>\d)-max Seat #(?<buttonNumber>\d) is the button";
 
-        public override string ConvertToParty()
+	    public override string ConvertToParty()
         {
-            var result = String.Format(@"Table Parahet. $0,000 Gtd {0}-Max ({1}) Table #{2} (Real Money)",
-                maxSeat, tournamentNumber, tableNumber);
+            var result =
+	            $"Table Parahet. $0,000 Gtd {maxSeat}-Max ({tournamentNumber}) Table #{tableNumber} (Real Money)";
             result += Environment.NewLine;
-            result += String.Format(@"Seat {0} is the button", buttonNumber);
+            result += $"Seat {buttonNumber} is the button";
             result += Environment.NewLine;
-            result += String.Format(@"Total number of players : {0}/{1} ", numberOfPlayers, maxSeat);
+            result += $"Total number of players : {numberOfPlayers}/{maxSeat} ";
             return result;
         }
 
-        public override void Initialize()
+	    public override string ConvertTo888()
+	    {
+		    var result = $"Tournament #{tournamentNumber} $666 + $66 - Table #{tableNumber} {maxSeat} Max (Real Money)";
+		    result += Environment.NewLine;
+		    result += $"Seat {buttonNumber} is the button";
+		    result += Environment.NewLine;
+		    result += $"Total number of players : {numberOfPlayers}";
+		    return result;
+		}
+
+	    public override void Initialize()
         {
             var match = new Regex(pattern).Match(str);
             tournamentNumber = Int64.Parse(match.Groups["tournamentNumber"].Value);

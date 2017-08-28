@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using CodedUI_Temp.ATProMethods;
-using HandsConverter.Converters;
-using System.Diagnostics;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace HandsConverter
 {
-    public partial class Form1 : Form
+	public partial class Form1 : Form
     {
         public Form1()
         {
@@ -61,12 +57,11 @@ namespace HandsConverter
         }
 
 
+
         private void ConvertBtn_Click(object sender, EventArgs e)
         {
-            //backgroundWorker1.RunWorkerAsync();
-            
             var timer = Stopwatch.StartNew();
-            MULTI();
+            MultiToParty();
             timer.Stop();
             ConvertProgressBar.Value = 100*((int)skippedFilesCount + (int)convertedFilesCount)/(int)filesCount;
             ProgressbarLbl.Text = ConvertProgressBar.Value.ToString();
@@ -74,7 +69,7 @@ namespace HandsConverter
         }
 
 
-        private string ConvertFileName(string fileName)
+        private string ConvertFileNameToParty(string fileName)
         {
             var pattern = @"HH(?<fileName>.*)";
             var match = new Regex(pattern).Match(fileName);
@@ -82,7 +77,15 @@ namespace HandsConverter
             return String.Format("CNV({0})", tournamentNumber);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+	    private string ConvertFileNameTo888(string fileName)
+	    {
+		    var pattern = @"HH(?<fileName>.*)";
+		    var match = new Regex(pattern).Match(fileName);
+		    var tournamentNumber = match.Groups["fileName"].Value;
+		    return String.Format("CNV({0})", tournamentNumber);
+	    }
+
+		private void button1_Click(object sender, EventArgs e)
         {
             backgroundWorker1.CancelAsync();
         }
@@ -137,7 +140,7 @@ namespace HandsConverter
                         break;
                     }
                     var outputFileName = new DirectoryInfo(OutputFolderPath.Text).FullName + @"\" +
-                                         ConvertFileName(file.Name) + ".txt";
+                                         ConvertFileNameToParty(file.Name) + ".txt";
 
                     var hands = SplitHands(File.ReadAllLines(file.FullName).Select(l => l.Trim()).ToList());
 
@@ -206,76 +209,14 @@ namespace HandsConverter
                 skippedFilesCount);
         }
 
+		//secret button
         private void button2_Click(object sender, EventArgs e)
         {
-            var timer = Stopwatch.StartNew();
-            MainProcess();
-            timer.Stop();
-            label1.Text = timer.ElapsedMilliseconds.ToString()+ String.Format(" Converted: {0}; Skipped {1}  of " + filesCount, convertedFilesCount, skippedFilesCount);
         }
-
-
-        public void MainProcess()
-        {
-            List<FileInfo> files = new List<FileInfo>();
-            if (SourceFilePathTxb.Text.EndsWith("txt"))
-            {
-                files.Add(new FileInfo(SourceFilePathTxb.Text));
-            }
-            else
-            {
-                DirectoryInfo dirInfo = new DirectoryInfo(SourceFilePathTxb.Text);
-                files =
-                    dirInfo.GetFiles("*.txt", SearchOption.AllDirectories)
-                        .Where(f => f.Name.StartsWith("HH"))
-                        .ToList();
-            }
-            filesCount = files.Count;
-            label1.Text = "0 files of " + filesCount.ToString();
-            skippedFilesCount = 0;
-            convertedFilesCount = 0;
-            double percent = 0;
-
-            foreach (var file in files)
-            {
-                var outputFileName = new DirectoryInfo(OutputFolderPath.Text).FullName + @"\" +
-                                     ConvertFileName(file.Name) + ".txt";
-
-                var hands = SplitHands(File.ReadAllLines(file.FullName).Select(l => l.Trim()).ToList());
-
-                using (
-                    StreamWriter sw =
-                        new StreamWriter(new FileStream(outputFileName, FileMode.Create, FileAccess.Write)))
-                {
-                    foreach (var hand in hands)
-                    {
-                        var handParty = hand.ToParty();
-                        if (handParty != null)
-                            foreach (var line in handParty)
-                            {
-                                sw.WriteLine(line);
-                                sw.Flush();
-                            }
-                    }
-                }
-                var convertedFile = new FileInfo(outputFileName);
-                if (convertedFile.Length == 0)
-                {
-                    convertedFile.Delete();
-                    skippedFilesCount++;
-                }
-                else
-                    convertedFilesCount++;
-                //label1.Text = String.Format("Converted: {0}; Skipped {1}  of " + filesCount.ToString(), convertedFilesCount, skippedFilesCount);
-            }
-        }
-
-
-
 
 
         //http://professorweb.ru/my/csharp/optimization/level4/4_2.php
-        public void MULTI()
+        public void MultiToParty()
         {
             List<FileInfo> files = new List<FileInfo>();
             if (SourceFilePathTxb.Text.EndsWith("txt"))
@@ -291,85 +232,38 @@ namespace HandsConverter
                         .ToList();
             }
             var outputDir = new DirectoryInfo(OutputFolderPath.Text);
-            MultiThreadConvert(files, outputDir);
+            MultiThreadConvertToParty(files, outputDir);
         }
 
+	    public void MultiTo888()
+	    {
+		    List<FileInfo> files = new List<FileInfo>();
+		    if (SourceFilePathTxb.Text.EndsWith("txt"))
+		    {
+			    files.Add(new FileInfo(SourceFilePathTxb.Text));
+		    }
+		    else
+		    {
+			    DirectoryInfo dirInfo = new DirectoryInfo(SourceFilePathTxb.Text);
+			    files =
+				    dirInfo.GetFiles("*.txt", SearchOption.AllDirectories)
+					    .Where(f => f.Name.StartsWith("HH"))
+					    .ToList();
+		    }
+		    var outputDir = new DirectoryInfo(OutputFolderPath.Text);
+		    MultiThreadConvertTo888(files, outputDir);
+	    }
 
-        /// <summary>
-        /// using POOL
-        /// </summary>
-        /// <param name="files"></param>
-        /// <param name="outputDir"></param>
-        public void MultiPoolConvert(List<FileInfo> files, DirectoryInfo outputDir)
-        {
-            uint iteration = 6;//threads count
-            uint filesCountForOneThread = (uint)filesCount / iteration;
-            ManualResetEvent allDone = new ManualResetEvent(initialState: false);
-            filesCount = files.Count;
-            long completed = 0;
-
-            for (uint i = 0; i < iteration; i++) 
-            {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object s)
-                {
-                    var startI = i * filesCountForOneThread;
-                    var endI = startI + filesCountForOneThread;
-                    if (i >= iteration - 1)
-                        endI = (uint)filesCount;
-
-                    for (uint j = (uint)startI; j < endI; j++)
-                    {
-                        var file = files[(int)j];
-                        var outputFileName = outputDir.FullName + @"\" + ConvertFileName(file.Name) + ".txt";
-
-                        var hands = SplitHands(File.ReadAllLines(file.FullName).Select(l => l.Trim()).ToList());
-
-                        using (
-                            StreamWriter sw =
-                                new StreamWriter(new FileStream(outputFileName, FileMode.Create, FileAccess.Write)))
-                        {
-                            foreach (var hand in hands)
-                            {
-                                var handParty = hand.ToParty();
-                                if (handParty != null)
-                                    foreach (var line in handParty)
-                                    {
-                                        sw.WriteLine(line);
-                                        sw.Flush();
-                                    }
-                            }
-                        }
-
-                        var convertedFile = new FileInfo(outputFileName);
-                        if (convertedFile.Length == 0)
-                        {
-                            convertedFile.Delete();
-                            skippedFilesCount++;
-                        }
-                        else
-                            convertedFilesCount++;
-                    }
-                    if (Interlocked.Increment(ref completed) == iteration)
-                    {
-                        allDone.Set();
-                    }
-                }));
-                Thread.Sleep(200);
-            }
-            allDone.WaitOne();
-        }
-
-
-        private void button3_Click(object sender, EventArgs e)
+		private void button3_Click(object sender, EventArgs e)
         {
             //var timer = Stopwatch.StartNew();
-            MULTI();
+            MultiToParty();
             //timer.Stop();
             label1.Text = String.Format(" Converted: {0}; Skipped {1}  of " + filesCount, convertedFilesCount, skippedFilesCount);;
         }
 
 
-        public void MultiThreadConvert(List<FileInfo> files, DirectoryInfo outputDir)
+        public void MultiThreadConvertToParty(List<FileInfo> files, DirectoryInfo outputDir)
         {
             filesCount = files.Count;
             uint numThreads = 8;// (uint)Environment.ProcessorCount;
@@ -390,7 +284,7 @@ namespace HandsConverter
                     for (uint number = chunkStart; number < chunkEnd; number++)
                     {
                         var file = files[(int)number];
-                        var outputFileName = outputDir.FullName + @"\" + ConvertFileName(file.Name) + ".txt";
+                        var outputFileName = outputDir.FullName + @"\" + ConvertFileNameToParty(file.Name) + ".txt";
 
                         var hands = SplitHands(File.ReadAllLines(file.FullName).Select(l => l.Trim()).ToList());
                         
@@ -436,11 +330,82 @@ namespace HandsConverter
                 thread.Join();
             }
         }
-        public delegate void UpdateTextCallback(string text);
 
-        private void UpdateText(string text)
-        {
-            label1.Text = text;
-        }
-    }
+	    public void MultiThreadConvertTo888(List<FileInfo> files, DirectoryInfo outputDir)
+	    {
+		    filesCount = files.Count;
+		    uint numThreads = 8;// (uint)Environment.ProcessorCount;
+		    uint chunk = (uint)filesCount / numThreads;
+
+		    Thread[] threads = new Thread[numThreads];
+		    for (uint i = 0; i < numThreads; ++i)
+		    {
+			    uint chunkStart = i * chunk;
+			    uint chunkEnd = chunkStart + chunk;
+			    if (i == numThreads - 1) // the latest thread should work with all rest files
+			    {
+				    chunkEnd = (uint)filesCount;
+			    }
+
+			    threads[i] = new Thread(() =>
+			    {
+				    for (uint number = chunkStart; number < chunkEnd; number++)
+				    {
+					    var file = files[(int)number];
+					    var outputFileName = outputDir.FullName + @"\" + ConvertFileNameTo888(file.Name) + ".txt";
+
+					    var hands = SplitHands(File.ReadAllLines(file.FullName).Select(l => l.Trim()).ToList());
+
+					    using (
+						    StreamWriter sw =
+							    new StreamWriter(new FileStream(outputFileName, FileMode.Create, FileAccess.Write, FileShare.Write)))
+					    {
+						    foreach (var hand in hands)
+						    {
+							    var hand888 = hand.To888();
+							    if (hand888 != null)
+								    foreach (var line in hand888)
+								    {
+									    sw.WriteLine(line);
+									    sw.Flush();
+								    }
+						    }
+					    }
+
+					    var convertedFile = new FileInfo(outputFileName);
+					    if (convertedFile.Length == 0)
+					    {
+						    convertedFile.Delete();
+						    skippedFilesCount++;
+					    }
+					    else
+						    convertedFilesCount++;
+				    }
+			    });
+			    threads[i].IsBackground = true;
+		    }
+
+		    threads.ToList().ForEach(t => t.Start());
+
+		    while (threads.Any(t => t.IsAlive))
+		    {
+			    var percent = 100 * (skippedFilesCount + convertedFilesCount) / filesCount;
+			    ConvertProgressBar.Value = (int)percent;
+		    }
+		    foreach (var thread in threads)
+		    {
+			    thread.Join();
+		    }
+	    }
+		
+		private void To888Btn_Click(object sender, EventArgs e)
+		{
+			var timer = Stopwatch.StartNew();
+			MultiTo888();
+			timer.Stop();
+			ConvertProgressBar.Value = 100 * ((int)skippedFilesCount + (int)convertedFilesCount) / (int)filesCount;
+			ProgressbarLbl.Text = ConvertProgressBar.Value.ToString();
+			label1.Text = timer.Elapsed.ToString("g") + ". " + String.Format(" Converted: {0}; Skipped {1}  of " + filesCount, convertedFilesCount, skippedFilesCount);
+		}
+	}
 }

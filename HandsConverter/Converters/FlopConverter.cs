@@ -19,25 +19,18 @@ namespace HandsConverter.Converters
         private const string patternAfterCard2 = " " + Consts.Card + @"\]";
         private const string patternBeforeCard3 = @"\*\*\* FLOP \*\*\* \[" + Consts.Card + " " + Consts.Card + " ";
         private const string patternAfterCard3 = @"\]";
+
         public FlopConverter(string str) : base(str)
         {
         }
 
-        protected override string pattern
-        {
-            get
-            {
-                return @"\*\*\* FLOP \*\*\* \[" + Consts.Card + " " + Consts.Card + " " +
-                       Consts.Card + @"\]";
-            }
-        }
+        protected override string pattern => @"\*\*\* FLOP \*\*\* \[" + Consts.Card + " " + Consts.Card + " " +
+                                             Consts.Card + @"\]";
 
-        public override string ConvertToParty()
-        {
-            return String.Format("** Dealing Flop ** [ {0}, {1}, {2} ]", card1, card2, card3);
-        }
+	    public override string ConvertToParty() => $"** Dealing Flop ** [ {card1}, {card2}, {card3} ]";
+	    public override string ConvertTo888() => $"** Dealing flop ** [ {card1}, {card2}, {card3} ]";
 
-        public override void Initialize()
+		public override void Initialize()
         {
             card1 = Regex.Replace(Regex.Replace(str, patternBeforeCard1, ""), patternAfterCard1, "");
             card2 = Regex.Replace(Regex.Replace(str, patternBeforeCard2, ""), patternAfterCard2, "");

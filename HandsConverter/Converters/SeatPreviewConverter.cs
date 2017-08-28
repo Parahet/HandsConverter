@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HandsConverter.Converters
 {
-    public class SeatPreviewConverter : ConverterWithPlayerName
+	public class SeatPreviewConverter : ConverterWithPlayerName
     {
         private int seatNumber;
         private int chipsCount;
@@ -16,17 +12,13 @@ namespace HandsConverter.Converters
         {
         }
 
-        protected override string pattern
-        {
-            get { return @"Seat (?<seatNumber>\d): (?<playerName>.*) \((?<chipsCount>\d+) in chips\)"; }
-        }
+        protected override string pattern => @"Seat (?<seatNumber>\d): (?<playerName>.*) \((?<chipsCount>\d+) in chips\)";
 
-        public override string ConvertToParty()
-        {
-            return "Seat " + seatNumber.ToString() + ": " + PlayerName + " ( " + chipsCount.ToCommaSeparateString() + " )";
-        }
+	    public override string ConvertToParty() => "Seat " + seatNumber.ToString() + ": " + PlayerName + " ( " + chipsCount.ToCommaSeparateString() + " )";
 
-        public override void Initialize()
+	    public override string ConvertTo888() => $"Seat {seatNumber}: {PlayerName} ( {chipsCount.ToCommaSeparateString()} )";
+
+	    public override void Initialize()
         {
             var match = new Regex(pattern).Match(str);
             playerName = match.Groups["playerName"].Value;

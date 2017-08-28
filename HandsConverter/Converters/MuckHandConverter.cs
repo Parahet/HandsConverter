@@ -14,17 +14,12 @@ namespace HandsConverter.Converters
         {
         }
 
-        protected override string pattern
-        {
-            get { return @".*" + patternWithoutName; } 
-        }
+        protected override string pattern => @".*" + patternWithoutName;
 
-        public override string ConvertToParty()
-        {
-            return String.Format("{0} does not show cards.", PlayerName);
-        }
+	    public override string ConvertToParty() => $"{PlayerName} does not show cards.";
+	    public override string ConvertTo888() => $"{PlayerName} did not show his hand";
 
-        public override void Initialize()
+	    public override void Initialize()
         {
             playerName = Regex.Replace(str, patternWithoutName, "");
         }

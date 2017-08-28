@@ -27,8 +27,8 @@ namespace HandsConverter
             this.hand = hand;
             sidePotNumber = 1;
         }
-
-        public void Initialize()
+	    #region Party methods
+		public void Initialize()
         {
             var players = Helper.Players;
             playersPutInAmount = new Dictionary<string, long>(); 
@@ -71,20 +71,13 @@ namespace HandsConverter
             var result = new List<string>();
 
             var uncalledBetPlayers = new Dictionary<string, long>(); //need to add uncalled bet to win chips count
-            
 
-            var isFirstPostAnte = true;//this flag need to add 2 additional rows before post ante rows
             var seatPreviewCount = 0;// or after seatPreview rows
-
-
             var state = Enums.State.PreFlop;
 
 
             foreach (var line in hand)
             {
-                
-                
-
                 var uncalledBetConv = new UncalledBetConverter(line);
                 if (uncalledBetConv.IsMatch())
                 {
@@ -180,31 +173,18 @@ namespace HandsConverter
                     seatPreviewCount++;
                     if (seatPreviewCount == numberOfPlayers)
                     {
-                        result.Add(String.Format(@"Trny:{0} Level:{1} ", tournamentNumber.ToString(),
-                            arabicLevel.ToString()));
+                        result.Add($@"Trny:{tournamentNumber.ToString()} Level:{arabicLevel.ToString()} ");
                         if (ante != 0)
-                            result.Add(String.Format(@"Blinds-Antes({0}/{1} -{2})",
-                                smallBlind.ToSeparateString().Trim(),
-                                bigBlind.ToSeparateString().Trim(),
-                                ante.ToSeparateString().Trim()));
+                            result.Add($@"Blinds-Antes({smallBlind.ToSeparateString().Trim()}/{
+			                            bigBlind.ToSeparateString().Trim()
+		                            } -{ante.ToSeparateString().Trim()})");
                         else
-                            result.Add(String.Format(@"Blinds-Antes({0}/{1})",
-                                smallBlind.ToSeparateString().Trim(),
-                                bigBlind.ToSeparateString().Trim()));
+                            result.Add($@"Blinds-Antes({smallBlind.ToSeparateString().Trim()}/{
+			                            bigBlind.ToSeparateString().Trim()
+		                            })");
                     }
                     continue;
                 }
-                /*
-                var postAnte = new PostAnteConverter(line);
-                if (postAnte.IsMatch() && isFirstPostAnte)
-                {
-                    result.Add(String.Format(@"Trny:{0} Level:{1} ", tournamentNumber.ToString(), arabicLevel.ToString()));
-                    result.Add(String.Format(@"Blinds-Antes({0}/{1} -{2})",
-                        smallBlind.ToSeparateString().Trim(),
-                        bigBlind.ToSeparateString().Trim(),
-                        ante.ToSeparateString().Trim()));
-                    isFirstPostAnte = false;
-                }*/
 
                 var converters = new List<Converter>()
                 {
@@ -236,8 +216,7 @@ namespace HandsConverter
                    ? players[pl.Key]
                    : pl.Key.GetHashCode().ToString();
 
-
-                result.Add(String.Format("{0} wins {1} chips", convertedPlayerName, pl.Value.ToCommaSeparateString()));
+                result.Add($"{convertedPlayerName} wins {pl.Value.ToCommaSeparateString()} chips");
             }
             return result;
         }
@@ -249,5 +228,10 @@ namespace HandsConverter
                 newCollection.Add(pair.Key, 0);
             playersPutInAmount = newCollection;
         }
+		#endregion
+		public List<string> To888()
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 }
