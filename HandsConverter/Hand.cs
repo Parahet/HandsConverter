@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using HandsConverter.Converters;
 
 namespace HandsConverter
 {
-    public class Hand
+	public class Hand
     {
         public long tournamentNumber;
         public int arabicLevel;
@@ -231,7 +226,124 @@ namespace HandsConverter
 		#endregion
 		public List<string> To888()
 	    {
-		    throw new NotImplementedException();
-	    }
+			Initialize();
+		    if (SHOULD_CONVERT == false) return null; // return null - if not need to convert
+		    var result = new List<string>();
+
+		    var seatPreviewCount = 0;// or after seatPreview rows
+		    var state = Enums.State.PreFlop;
+
+
+		    foreach (var line in hand)
+		    {
+			    var uncalledBetConv = new UncalledBetConverter(line);
+			    if (uncalledBetConv.IsMatch())//not using in 888
+			    {
+				    continue;
+			    }
+
+			    var collectedPotConv = new CollectedPotConverter(line, sidePotNumber, playersPutInAmount);
+			    if (collectedPotConv.IsMatch())
+			    {
+				    result.Add(collectedPotConv.ConvertTo888());
+				    sidePotNumber = collectedPotConv.sidePotNumber;
+				    playersPutInAmount = collectedPotConv.playersPutInAmount;
+				    continue;
+			    }
+
+			    #region FLOP TURN RIVER Converters and reset playersPutInAmount after each street
+			    var flopConv = new FlopConverter(line);
+			    if (flopConv.IsMatch())
+			    {
+				    state = Enums.State.Flop;
+				    ResetPlayersPutInCollection();
+				    result.Add(flopConv.ConvertTo888());
+				    continue;
+			    }
+
+			    var turnConv = new TurnConverter(line);
+			    if (turnConv.IsMatch())
+			    {
+				    state = Enums.State.Turn;
+				    ResetPlayersPutInCollection();
+				    result.Add(turnConv.ConvertTo888());
+				    continue;
+			    }
+
+			    var riverConv = new RiverConverter(line);
+			    if (riverConv.IsMatch())
+			    {
+				    state = Enums.State.River;
+				    ResetPlayersPutInCollection();
+				    result.Add(riverConv.ConvertTo888());
+				    continue;
+			    }
+			    #endregion
+
+			    var postBBConv = new PostBBConverter(line, playersPutInAmount);
+			    if (postBBConv.IsMatch())
+			    {
+				    result.Add(postBBConv.ConvertTo888());
+				    playersPutInAmount = postBBConv.playersPutInAmount;
+				    continue;
+			    }
+
+			    var postSBConv = new PostSBConverter(line, playersPutInAmount);
+			    if (postSBConv.IsMatch())
+			    {
+				    result.Add(postSBConv.ConvertTo888());
+				    playersPutInAmount = postSBConv.playersPutInAmount;
+				    continue;
+			    }
+
+			    var betConv = new BetConverter(line, playersPutInAmount);
+			    if (betConv.IsMatch())
+			    {
+				    result.Add(betConv.ConvertTo888());
+				    playersPutInAmount = betConv.playersPutInAmount;
+				    continue;
+			    }
+
+			    var callConv = new CallConverter(line, playersPutInAmount);
+			    if (callConv.IsMatch())
+			    {
+				    result.Add(callConv.ConvertTo888());
+				    playersPutInAmount = callConv.playersPutInAmount;
+				    continue;
+			    }
+
+			    var raiseConv = new RaiseConverter(line, playersPutInAmount);
+			    if (raiseConv.IsMatch())
+			    {
+				    result.Add(raiseConv.ConvertTo888());
+				    playersPutInAmount = raiseConv.playersPutInAmount;
+				    continue;
+			    }
+
+			    var converters = new List<Converter>()
+			    {
+				    new CheckConverter(line),
+				    new PostAnteConverter(line),
+				    new HoleCardsConverter(line),
+				    new DealtToPlayerConverter(line),
+				    new PlayerShowsConverter(line),
+				    new MuckHandConverter(line),
+				    new HandHeaderConverter(line, ante),
+				    new TableHeaderConverter(line, numberOfPlayers),
+				    new FoldConverter(line),
+					new SeatPreviewConverter(line)
+				};
+
+			    foreach (var converter in converters)
+			    {
+				    if (converter.IsMatch())
+				    {
+					    result.Add(converter.ConvertTo888());
+					    break;
+				    }
+			    }
+		    }
+		    return result;
+		}
     }
 }

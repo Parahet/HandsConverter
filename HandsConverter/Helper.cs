@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace HandsConverter
 {
-    public class Helper
+	public class Helper
     {
         private static Dictionary<string, string> players;
 

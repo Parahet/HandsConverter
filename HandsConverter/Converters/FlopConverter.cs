@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace HandsConverter.Converters
 {
-    public class FlopConverter : Converter
+	public class FlopConverter : Converter
     {
         private string card1;
         private string card2;

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HandsConverter.Converters
 {
-    public class BetConverter : ConverterWithPlayerName
+	public class BetConverter : ConverterWithPlayerName
     {
         private int count;
         private bool isAllIn;
@@ -32,7 +29,12 @@ namespace HandsConverter.Converters
                 return PlayerName + " bets [" + count.ToCommaSeparateString() + "]";
         }
 
-        public override void Initialize()
+	    public override string ConvertTo888()
+	    {
+		    return $"{PlayerName} bets [${count.ToCommaSeparateString()}]";
+	    }
+
+	    public override void Initialize()
         {
             var match = new Regex(pattern).Match(str);
             playerName = match.Groups["playerName"].Value;

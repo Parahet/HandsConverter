@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HandsConverter.Converters
 {
-    public class RaiseConverter : ConverterWithPlayerName
+	public class RaiseConverter : ConverterWithPlayerName
     {
         private long count;
         private long countTo;
         private bool isAllIn;
-
-        private const string patternWithoutName = @": raises \d+ to \d+$";
-        private const string pattern1 = @".*: raises ";
-        private const string pattern2 = @" to \d+$";
-        private const string pattern3 = @".*: raises \d+ to ";
 
         public Dictionary<string, long> playersPutInAmount;
         public RaiseConverter(string str, Dictionary<string, long> playersPutInAmount)
@@ -24,11 +16,9 @@ namespace HandsConverter.Converters
         {
             this.playersPutInAmount = playersPutInAmount;
         }
-        protected override string pattern
-        {
-            get { return @"(?<playerName>.*): raises (?<count>\d+) to (?<countTo>\d+)(?<isAllIn>| and is all-in)$"; }
-        }
-        public override string ConvertToParty()
+        protected override string pattern => @"(?<playerName>.*): raises (?<count>\d+) to (?<countTo>\d+)(?<isAllIn>| and is all-in)$";
+
+	    public override string ConvertToParty()
         {
             countTo -= playersPutInAmount[playerName];
             playersPutInAmount[playerName] += countTo;
@@ -37,8 +27,15 @@ namespace HandsConverter.Converters
             else
                 return PlayerName + " raises [" + countTo.ToCommaSeparateString() + "]";
         }
-        
-        public override void Initialize()
+
+	    public override string ConvertTo888()
+	    {
+		    countTo -= playersPutInAmount[playerName];
+		    playersPutInAmount[playerName] += countTo;
+		    return $"{PlayerName} raises [${countTo.ToCommaSeparateString()}]";
+	    }
+
+	    public override void Initialize()
         {
             var match = new Regex(pattern).Match(str);
             playerName = match.Groups["playerName"].Value;

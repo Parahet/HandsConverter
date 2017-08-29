@@ -12,17 +12,19 @@ namespace HandsConverter.Converters
         {
         }
 
-        protected override string pattern
-        {
-            get { return @"\*\*\* HOLE CARDS \*\*\*"; }
-        }
+        protected override string pattern => @"\*\*\* HOLE CARDS \*\*\*";
 
-        public override string ConvertToParty()
+	    public override string ConvertToParty()
         {
             return @"** Dealing down cards **";
         }
 
-        public override void Initialize()
+	    public override string ConvertTo888()
+	    {
+		    return @"** Dealing down cards **";
+	    }
+
+	    public override void Initialize()
         {
         }
     }

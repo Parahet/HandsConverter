@@ -32,7 +32,7 @@ namespace HandsConverter.Converters
 	    public override string ConvertTo888()
 	    {
 			playersPutInAmount[playerName] += count;
-		    return PlayerName + " posts small blind [$" + count.ToCommaSeparateString() + "].";
+		    return $"{PlayerName} posts small blind [${count.ToCommaSeparateString()}]";
 		}
 
 	    public override void Initialize()

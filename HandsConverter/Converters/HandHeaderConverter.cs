@@ -14,47 +14,50 @@ namespace HandsConverter.Converters
         public int ante;
         public string buyIn;
         public string ET;
-        private const string TIME = "Saturday, July 16, 20:26:02 EET 2016";
+        private const string TimeForParty = "Saturday, July 16, 20:26:02 EET 2016";
+	    private const string TimeFor888 = "25 08 2017 04:16:36";
 
-        public HandHeaderConverter(string str, int ante)
+		public HandHeaderConverter(string str, int ante)
             : base(str)
         {
             this.ante = ante;
         }
 
-        protected override string pattern
-        {
-            get
-            {
-                return
-                    @"PokerStars Hand #(?<handNumber>\d+): Tournament #(?<tournamentNumber>\d+), (?<buyIn>.*) Hold'em No Limit - Level (?<level>[I,V,X,L,C,D,M]+) \((?<sb>\d+)\/(?<bb>\d+)\) - (?<ET>.*)";
-            }
-        }
+        protected override string pattern => @"PokerStars Hand #(?<handNumber>\d+): Tournament #(?<tournamentNumber>\d+), (?<buyIn>.*) Hold'em No Limit - Level (?<level>[I,V,X,L,C,D,M]+) \((?<sb>\d+)\/(?<bb>\d+)\) - (?<ET>.*)";
 
-        public override string ConvertToParty()
+	    public override string ConvertToParty()
         {
-            var result = "Game #" + handNumber.ToString() + " starts.";
+            var result = "Game #" + handNumber + " starts.";
             result += Environment.NewLine;
             result += Environment.NewLine;
-            result += @"#Game No : " + handNumber.ToString();
+            result += @"#Game No : " + handNumber;
             result += Environment.NewLine;
-            result += String.Format(@"***** Hand History for Game {0} *****", handNumber.ToString());
+            result += $@"***** Hand History for Game {handNumber} *****";
             result += Environment.NewLine;
             if (ante != 0)
-                result += String.Format(
-                    @"NL Texas Hold'em {0} Buy-in Trny:{1} Level:{2}  Blinds-Antes({3}/{4} -{5}) - {6}", buyIn,
-                    tournamentNumber, arabicLevel, smallBlind.ToSeparateString(),
-                    bigBlind.ToSeparateString(),
-                    ante.ToSeparateString(), TIME.ToString());
+                result +=
+		                $@"NL Texas Hold'em {buyIn} Buy-in Trny:{tournamentNumber} Level:{arabicLevel}  Blinds-Antes({
+			                smallBlind.ToSeparateString()
+		                }/{bigBlind.ToSeparateString()} -{ante.ToSeparateString()}) - {TimeForParty}";
             else
-                result += String.Format(
-                    @"NL Texas Hold'em {0} Buy-in Trny:{1} Level:{2}  Blinds-Antes({3}/{4}) - {5}", buyIn,
-                    tournamentNumber, arabicLevel, smallBlind.ToSeparateString(),
-                    bigBlind.ToSeparateString(), TIME.ToString());
+                result +=
+		                $@"NL Texas Hold'em {buyIn} Buy-in Trny:{tournamentNumber} Level:{arabicLevel}  Blinds-Antes({
+			                smallBlind.ToSeparateString()
+		                }/{bigBlind.ToSeparateString()}) - {TimeForParty}";
             return result;
         }
 
-        public override void Initialize()
+	    public override string ConvertTo888()
+	    {
+		    var result = $"#Game No : {handNumber}";
+		    result += Environment.NewLine;
+		    result += $"***** 888poker Hand History for Game {handNumber} *****";
+		    result += Environment.NewLine;
+		    result += $"${smallBlind.ToSeparateString()}/${bigBlind.ToSeparateString()} Blinds No Limit Holdem - *** {TimeFor888}";
+		    return result;
+		}
+
+		public override void Initialize()
         {
             var match = new Regex(pattern).Match(str);
             handNumber = Int64.Parse(match.Groups["handNumber"].Value);

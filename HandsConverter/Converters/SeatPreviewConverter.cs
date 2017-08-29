@@ -16,7 +16,7 @@ namespace HandsConverter.Converters
 
 	    public override string ConvertToParty() => "Seat " + seatNumber.ToString() + ": " + PlayerName + " ( " + chipsCount.ToCommaSeparateString() + " )";
 
-	    public override string ConvertTo888() => $"Seat {seatNumber}: {PlayerName} ( {chipsCount.ToCommaSeparateString()} )";
+	    public override string ConvertTo888() => $"Seat {seatNumber}: {PlayerName} ( ${chipsCount.ToCommaSeparateString()} )";
 
 	    public override void Initialize()
         {
