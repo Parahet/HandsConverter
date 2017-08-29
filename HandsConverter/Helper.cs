@@ -30,5 +30,14 @@ namespace HandsConverter
                 : files.First();
             return new CSVParser(file.FullName).GetPartyPlayers();
         }
-    }
+	    public static Dictionary<string, string> Get888Players()
+	    {
+		    var dir = new DirectoryInfo(Environment.CurrentDirectory);
+		    var files = dir.GetFiles("*.csv");
+		    var file = files.Any(f => f.Name.ToLower().Contains("players"))
+			    ? files.First(f => f.Name.ToLower().Contains("players"))
+			    : files.First();
+		    return new CSVParser(file.FullName).Get888Players();
+	    }
+	}
 }

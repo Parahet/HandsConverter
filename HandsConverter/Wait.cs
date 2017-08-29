@@ -13,8 +13,6 @@ namespace  CodedUI_Temp.ATProMethods
             while (true)
             {
                 if (p()) return;
-                //Console.WriteLine(timer.ElapsedMilliseconds+" passed, result is false");
-                //Log.Warn(timer.ElapsedMilliseconds + " ms past: result false");
                 if (timer.ElapsedMilliseconds > timeout) throw new TimeoutException("Timeout Error: " + err);
             }
         }

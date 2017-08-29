@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HandsConverter
@@ -337,7 +338,7 @@ namespace HandsConverter
 		    uint numThreads = 8;// (uint)Environment.ProcessorCount;
 		    uint chunk = (uint)filesCount / numThreads;
 
-		    Thread[] threads = new Thread[numThreads];
+		    var tasks = new List<Task>();
 		    for (uint i = 0; i < numThreads; ++i)
 		    {
 			    uint chunkStart = i * chunk;
@@ -347,7 +348,7 @@ namespace HandsConverter
 				    chunkEnd = (uint)filesCount;
 			    }
 
-			    threads[i] = new Thread(() =>
+			    tasks.Add(Task.Run(() =>
 			    {
 				    for (uint number = chunkStart; number < chunkEnd; number++)
 				    {
@@ -382,20 +383,14 @@ namespace HandsConverter
 						    convertedFilesCount++;
 				    }
 			    });
-			    threads[i].IsBackground = true;
 		    }
 
-		    threads.ToList().ForEach(t => t.Start());
-
-		    while (threads.Any(t => t.IsAlive))
+		    while (tasks.Any(t => t.Status != TaskStatus.RanToCompletion))
 		    {
 			    var percent = 100 * (skippedFilesCount + convertedFilesCount) / filesCount;
 			    ConvertProgressBar.Value = (int)percent;
 		    }
-		    foreach (var thread in threads)
-		    {
-			    thread.Join();
-		    }
+			Task.WaitAll(tasks.ToArray());
 	    }
 		
 		private void To888Btn_Click(object sender, EventArgs e)
