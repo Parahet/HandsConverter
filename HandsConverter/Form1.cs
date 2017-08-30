@@ -75,7 +75,7 @@ namespace HandsConverter
             var pattern = @"HH(?<fileName>.*)";
             var match = new Regex(pattern).Match(fileName);
             var tournamentNumber = match.Groups["fileName"].Value;
-            return String.Format("CNV({0})", tournamentNumber);
+            return $"CNV({tournamentNumber})";
         }
 
 	    private string ConvertFileNameTo888(string fileName)
@@ -83,7 +83,7 @@ namespace HandsConverter
 		    var pattern = @"HH(?<fileName>.*)";
 		    var match = new Regex(pattern).Match(fileName);
 		    var tournamentNumber = match.Groups["fileName"].Value;
-		    return String.Format("CNV({0})", tournamentNumber);
+		    return $"888poker{tournamentNumber}";
 	    }
 
 		private void button1_Click(object sender, EventArgs e)
@@ -337,7 +337,6 @@ namespace HandsConverter
 		    filesCount = files.Count;
 		    uint numThreads = 8;// (uint)Environment.ProcessorCount;
 		    uint chunk = (uint)filesCount / numThreads;
-
 		    var tasks = new List<Task>();
 		    for (uint i = 0; i < numThreads; ++i)
 		    {
@@ -382,7 +381,7 @@ namespace HandsConverter
 					    else
 						    convertedFilesCount++;
 				    }
-			    });
+			    }));
 		    }
 
 		    while (tasks.Any(t => t.Status != TaskStatus.RanToCompletion))

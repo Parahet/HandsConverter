@@ -49,7 +49,10 @@ namespace HandsConverter.Converters
 
 	    public override string ConvertTo888()
 	    {
-		    var result = $"#Game No : {handNumber}";
+		    var result = Environment.NewLine;
+		    result += Environment.NewLine;
+		    result += Environment.NewLine;
+			result += $"#Game No : {handNumber}";
 		    result += Environment.NewLine;
 		    result += $"***** 888poker Hand History for Game {handNumber} *****";
 		    result += Environment.NewLine;
