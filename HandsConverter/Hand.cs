@@ -23,9 +23,9 @@ namespace HandsConverter
             sidePotNumber = 1;
         }
 	    #region Party methods
-		public void Initialize()
+		public void InitializeParty()
         {
-            var players = Helper.Players;
+            var players = Helper.PartyPlayers;
             playersPutInAmount = new Dictionary<string, long>(); 
             numberOfPlayers = 0;
             ante = 0;
@@ -58,10 +58,11 @@ namespace HandsConverter
                 }
             }
         }
+	   
 
-        public List<string> ToParty()
+		public List<string> ToParty()
         {
-            Initialize();
+            InitializeParty();
             if (SHOULD_CONVERT == false) return null; // return null - if not need to convert
             var result = new List<string>();
 
@@ -206,7 +207,7 @@ namespace HandsConverter
 
             foreach(var pl in uncalledBetPlayers)//in the end add not used uncalled bet players strings
             {
-                var players = Helper.Players;
+                var players = Helper.PartyPlayers;
                 var convertedPlayerName = players.ContainsKey(pl.Key)
                    ? players[pl.Key]
                    : pl.Key.GetHashCode().ToString();
@@ -224,9 +225,46 @@ namespace HandsConverter
             playersPutInAmount = newCollection;
         }
 		#endregion
+
+		#region 888 Methods
+	    public void Initialize888()
+	    {
+		    var players = Helper.Players888;
+		    playersPutInAmount = new Dictionary<string, long>();
+		    numberOfPlayers = 0;
+		    ante = 0;
+		    foreach (var line in hand)
+		    {
+			    var headerConvereter = new HandHeaderConverter(line, ante);
+			    if (headerConvereter.IsMatch())
+			    {
+				    tournamentNumber = headerConvereter.tournamentNumber;
+				    arabicLevel = headerConvereter.arabicLevel;
+				    smallBlind = headerConvereter.smallBlind;
+				    bigBlind = headerConvereter.bigBlind;
+				    continue;
+			    }
+			    var seatPreview = new SeatPreviewConverter(line);
+			    if (seatPreview.IsMatch())
+			    {
+				    playersPutInAmount.Add(seatPreview.playerName, 0);//store how many chips each player put-in on each street
+				    numberOfPlayers++;
+				    if (SHOULD_CONVERT == false)
+					    if (players.ContainsKey(seatPreview.playerName))
+						    SHOULD_CONVERT = true;
+				    continue;
+			    }
+			    var postAnte = new PostAnteConverter(line);
+			    if (postAnte.IsMatch())
+			    {
+				    ante = postAnte.ante;
+				    break;
+			    }
+		    }
+	    }
 		public List<string> To888()
 	    {
-			Initialize();
+		    Initialize888();
 		    if (SHOULD_CONVERT == false) return null; // return null - if not need to convert
 		    var result = new List<string>();
 
@@ -345,5 +383,6 @@ namespace HandsConverter
 		    }
 		    return result;
 		}
-    }
+		#endregion
+	}
 }

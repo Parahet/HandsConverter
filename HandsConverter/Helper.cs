@@ -7,21 +7,49 @@ namespace HandsConverter
 {
 	public class Helper
     {
-        private static Dictionary<string, string> players;
+        private static Dictionary<string, string> partyPlayers;
 
-        public static Dictionary<string, string> Players
+	    public static Dictionary<string, string> Players
+	    {
+		    get
+		    {
+			    if ((partyPlayers == null) &&(_888Players != null))
+				    return _888Players;
+			    if ((partyPlayers != null) && (_888Players == null))
+				    return _888Players;
+				throw new Exception("Need to Initialize Players");
+			}
+	    }
+
+
+		public static Dictionary<string, string> PartyPlayers
         {
             get
             {
-                if (players == null)
+                if (partyPlayers == null)
                 {
-                    players = Helper.GetPartyPlayers();
+                    partyPlayers = GetPartyPlayers();
+	                _888Players = null;
                 }
-                return players;
+                return partyPlayers;
             }
         }
+	    private static Dictionary<string, string> _888Players;
 
-        public static Dictionary<string, string> GetPartyPlayers()
+	    public static Dictionary<string, string> Players888
+	    {
+		    get
+		    {
+			    if (_888Players == null)
+			    {
+				    _888Players = Get888Players();
+				    partyPlayers = null;
+			    }
+			    return _888Players;
+		    }
+	    }
+
+		public static Dictionary<string, string> GetPartyPlayers()
         {
             var dir = new DirectoryInfo(Environment.CurrentDirectory);
             var files = dir.GetFiles("*.csv");
